@@ -1,4 +1,30 @@
 from pygame import image
+import pygame.key
+class Image(object):
+    def __init__(self, X_Y, path, Moveable = False):
+        self.surface = image.load(path)
+        self.X_Y_W_H = [X_Y[0], X_Y[1], self.surface.get_width(), self.surface.get_height()]
+        self.path = path
+        self.Moveable = Moveable
+        self.Move = False
+        
+    def Draw(self):
+        return self.surface
+
+    def Check(self, Event):
+        if self.Moveable:
+            if Event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.Rect(self.X_Y_W_H).collidepoint(Event.pos):
+                    if Event.button == 3:
+                        self.Move = True
+            if Event.type == pygame.MOUSEBUTTONUP:
+                if Event.button == 3:
+                    self.Move = False
+            if self.Move:
+                if Event.type == pygame.MOUSEMOTION:
+                    self.X_Y_W_H[0] += Event.rel[0]
+                    self.X_Y_W_H[1] += Event.rel[1]
+                    self.Draw()
 
 class Animation(object):
     def __init__(self, number_of_frames, path, name, file_format, speed, FPS):

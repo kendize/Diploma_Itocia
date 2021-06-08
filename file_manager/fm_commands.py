@@ -1,5 +1,4 @@
 #from file_manager.fm_queries import Get_List_Of_Drives, isDrives
-from fm import File_Manager
 from file_manager.fm_queries import *
 from kc import *
 import os
@@ -12,7 +11,7 @@ def Move_To_Path(obj, Store, Stop, Path):                                       
             return
         Current_Path = os.path.abspath(os.path.join(str(Path), obj))
         if os.path.isfile(Current_Path):
-            Store("File")
+            Store("!"+ str(Current_Path))
             Stop()
             return
         Store(Current_Path)
@@ -25,7 +24,10 @@ def Move_To_Path(obj, Store, Stop, Path):                                       
 def Create_Visual_Elements(*args, Disabled_Text_Color, Disabled_Body_Color, Disabled_Border_Color, Border_Size, Enabled_Text_Color, Enabled_Body_Color, Enabled_Border_Color, isDrives = False, Path):                                                   # Функція для створення візуальної презентації елементів
     
     x = 3
-    y = 3
+    if args:
+        y = 3 + args[0]
+    else:
+        y = 3
     w = 500
     h = 35
     text_size = 17

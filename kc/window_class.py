@@ -1,6 +1,7 @@
 from pygame import FULLSCREEN, QUIT, RESIZABLE, NOFRAME
 import pygame.display
 import pygame.time
+import os
 class Window_Class(object):
     def __init__(self, window_width = 800, window_height = 600, window_caption = "Application", Body_Color = [255, 255, 255], fullscreen = False):
         self.fullscreen = fullscreen
@@ -11,6 +12,7 @@ class Window_Class(object):
         self.surface = pygame.display.set_mode((self.width, self.height), RESIZABLE)
 
     def Start(self):
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "10,10"
         if self.fullscreen:
             self.surface = pygame.display.set_mode((self.width, self.height), FULLSCREEN, RESIZABLE)
         else:

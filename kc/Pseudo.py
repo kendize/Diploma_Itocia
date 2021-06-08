@@ -1,3 +1,4 @@
+from kc import text_class
 from kc import *
 import ctypes
 ctypes.windll.user32.SetProcessDPIAware()
@@ -35,6 +36,7 @@ class Pseudo_Window(object):
     def Stop(self):
         self.Loop = False
         print("Pseudo Stopped")
+        
 
     def Update_Elements(self):
         for Element in range(len(self.Elements)):
@@ -52,6 +54,7 @@ class Pseudo_Window(object):
             Update(self.FPS)
 
     def Start(self, Looped = False):
+        
         copp = Window.surface.copy()
         Not_Active = [
             Text,

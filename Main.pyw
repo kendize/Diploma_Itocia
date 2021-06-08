@@ -14,16 +14,29 @@ Enabled_Color = [150, 0, 0]
 FPS = 60
 
 def Choose_Image():
-    File_Manager()
-    return
+    try:
+        Opened_File = File_Manager()
+        if Opened_File:
+            Main_Window.Stop()
+            Main_Window.ChangeStore(Opened_File)
+            #Main_Window.Add(Text([100, 500, 100, 100], Main_Window.Store))
+            #Main_Window.Add(Image([500, 500], Opened_File))
+    except:
+        Error_Window = Pseudo_Window([300, 850], [400, 50], FPS = FPS, Body_Color=[250, 128, 114])
+        Error_Window.Add(Text([0, 0, 200, 50], "Error in import file", Text_Size=23))
+        Error_Window.Start()
+
+
 Main_Window = Pseudo_Window([0, 0], [1200, 900], FPS = FPS)
-Test_Window = Pseudo_Window([100, 100], [200, 200], Moveable=True, FPS=FPS)
 Main_Window.Add( Text([100, 100, 100, 100], "Hello") )
-Main_Window.Add( Input_Field([100, 200, 200, 50], "Kendize"))
+Main_Window.Add( Input_Field([100, 200, 200, 50], "Kendize", Border_Size=3))
 Main_Window.Add( Button([300, 400, 100, 30], "Test window"), func = Choose_Image)
-#Main_Window.Add( Button([300, 500, 100, 30], "Delete Elements"), func = Main_Window.RemoveAllElements)
 
 Main_Window.Start(True)
 
+Image_Showing_Window = Pseudo_Window([0, 0], [1200, 900], FPS = FPS)
 
-    
+Image_Showing_Window.Add(Image([0, 100], Main_Window.Store, Moveable=True))
+Image_Showing_Window.Add(Button([300, 400, 100, 30], "Test window"))
+Image_Showing_Window.Start(True)
+
