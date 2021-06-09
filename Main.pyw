@@ -13,30 +13,37 @@ Window.Start()
 Enabled_Color = [150, 0, 0]
 FPS = 60
 
+def Error_Message(Error):
+    Error_Window = Pseudo_Window([300, 850], [400, 50], FPS = FPS, Body_Color=[250, 128, 114])
+    Error_Window.Add(Text([10, 10, 200, 50], str(Error), Text_Size=23))
+    Error_Window.Start()
+
 def Choose_Image():
     try:
         Opened_File = File_Manager()
         if Opened_File:
+            print("Opened File: ", Opened_File)
             Main_Window.Stop()
             Main_Window.ChangeStore(Opened_File)
             #Main_Window.Add(Text([100, 500, 100, 100], Main_Window.Store))
             #Main_Window.Add(Image([500, 500], Opened_File))
     except:
-        Error_Window = Pseudo_Window([300, 850], [400, 50], FPS = FPS, Body_Color=[250, 128, 114])
-        Error_Window.Add(Text([0, 0, 200, 50], "Error in import file", Text_Size=23))
-        Error_Window.Start()
+        Error_Message("Cannot open folder/file")
 
 
-Main_Window = Pseudo_Window([0, 0], [1200, 900], FPS = FPS)
-Main_Window.Add( Text([100, 100, 100, 100], "Hello") )
-Main_Window.Add( Input_Field([100, 200, 200, 50], "Kendize", Border_Size=3))
-Main_Window.Add( Button([300, 400, 100, 30], "Test window"), func = Choose_Image)
+while 1:
+    Main_Window = Pseudo_Window([0, 0], [Window.width, Window.height], FPS = FPS)
+    Main_Window.Add( Text([100, 100, 10, 10], "Itocia") )
+    Main_Window.Add( Input_Field([100, 200, 200, 50], "Kendize", Border_Size=3, Enabled_Body_Color=[144, 238, 144]))
+    Main_Window.Add( Button([300, 400, 100, 30], "Test window"), func = Choose_Image)
 
-Main_Window.Start(True)
 
-Image_Showing_Window = Pseudo_Window([0, 0], [1200, 900], FPS = FPS)
+    Main_Window.Start(True)
+    if Main_Window.Store == "Closed":
+        break
 
-Image_Showing_Window.Add(Image([0, 100], Main_Window.Store, Moveable=True))
-Image_Showing_Window.Add(Button([300, 400, 100, 30], "Test window"))
-Image_Showing_Window.Start(True)
-
+    Image_Showing_Window = Pseudo_Window([0, 0], [Window.width, Window.height], FPS = FPS)
+    Image_Showing_Window.Add(Image([0, 0, 500, 500], Main_Window.Store, Moveable=True))
+    Image_Showing_Window.Add(Button([300, 550, 100, 30], "Delete all markers"), func = Image_Showing_Window.Elements[0].DeleteAllMarkers)
+    Image_Showing_Window.Start(True)
+    break

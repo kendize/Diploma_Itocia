@@ -10,15 +10,18 @@ class Pseudo_Window(object):
         self.Body_Color = Body_Color
         self.Border_Size = Border_Size
         self.Border_Color = Border_Color
-        self.Elements = [Button([Window_Res[0] - 38, 2, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230])]
-        self.functions = [False]
-        self.arguments = [False]
+        self.Elements = []#[Button([Window_Res[0] - 38, 2, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230])]
+        self.functions = []#[self.Stop]#[False]
+        self.arguments = []#[False]
         self.surface = pygame.Surface(self.Window_Res)
         self.Moveable = Moveable
         self.Move = False
         self.FPS = FPS
         self.Loop = True
         self.Store = []
+
+    def AddCloseButton(self):
+        self.Add(Button([self.Window_Res[0] - 38, 2, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230]), func=self.Close)
 
     def ChangeStore(self, info):
         print("Pseudo: Changing Store :", info)
@@ -35,8 +38,13 @@ class Pseudo_Window(object):
     
     def Stop(self):
         self.Loop = False
+        #self.ChangeStore("Closed")
         print("Pseudo Stopped")
-        
+    
+    def Close(self):
+        self.Loop = False
+        self.ChangeStore("Closed")
+        print("Pseudo Stopped")
 
     def Update_Elements(self):
         for Element in range(len(self.Elements)):
@@ -54,7 +62,7 @@ class Pseudo_Window(object):
             Update(self.FPS)
 
     def Start(self, Looped = False):
-        
+        self.AddCloseButton()
         copp = Window.surface.copy()
         Not_Active = [
             Text,
@@ -63,9 +71,9 @@ class Pseudo_Window(object):
         #Loop = True
         while self.Loop:
             for Event in pygame.event.get():
-                if self.Elements[0].Check(Event):
-                    self.Stop()
-                    return False
+                #if self.Elements[0].Check(Event):
+                #    self.Stop()
+                #    return False
 
                 for Element in range(len(self.Elements)):
                     if not(type(self.Elements[Element]) in Not_Active):

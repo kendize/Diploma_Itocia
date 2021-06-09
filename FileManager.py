@@ -4,7 +4,7 @@ from kc import *
 from file_manager import *
 
 def File_Manager(FPS = 60, 
-                Enabled_Body_Color = [255, 130, 130], 
+                Enabled_Body_Color = [144, 238, 144], 
                 Enabled_Border_Color = [130, 0, 0], 
                 Enabled_Text_Color = [0, 0, 0], 
                 Disabled_Body_Color = [230, 230, 230], 
@@ -14,10 +14,11 @@ def File_Manager(FPS = 60,
                 Path = "Drives"):
     window_resolution = [550, 750]
     window_position = [10, 10]
+
     def Scroll():
-        if File_Manager_Window.Elements[2].X_Y_W_H[1] < 0 or File_Manager_Window.Elements[-1].X_Y_W_H[1] > (window_resolution[1]-50):
+        if File_Manager_Window.Elements[1].X_Y_W_H[1] < 0 or File_Manager_Window.Elements[-2].X_Y_W_H[1] > (window_resolution[1]-50):
             for i in range(len(File_Manager_Window.Elements) - 2):
-                File_Manager_Window.Elements[i + 2].X_Y_W_H[1] += File_Manager_Window.Elements[1].y
+                File_Manager_Window.Elements[i + 1].X_Y_W_H[1] += File_Manager_Window.Elements[0].y
             File_Manager_Window.Update_Elements()
     if Path == "Drives":
         Elements = Get_List_Of_Drives()
@@ -29,7 +30,7 @@ def File_Manager(FPS = 60,
     while File_Manager_Loop:
         File_Manager_Window.Add(Invis_Scroll(0), func = Scroll)
         Elements = Create_Visual_Elements(
-            File_Manager_Window.Elements[1].y,
+            File_Manager_Window.Elements[0].y,
             Elements,
             Disabled_Text_Color = Disabled_Text_Color, 
             Disabled_Body_Color = Disabled_Body_Color, 
@@ -48,12 +49,13 @@ def File_Manager(FPS = 60,
         
         print("Store: ", File_Manager_Window.Store)
 
-        if not(File_Manager_Window.Start()):                                            # Якщо вікно закрите вручну
-            return False
+        File_Manager_Window.Start()                                           # Якщо вікно закрите вручну
         
         print("NewStore: ", File_Manager_Window.Store)
         if File_Manager_Window.Store == []:
             File_Manager_Window.Store = "Drives"
         if File_Manager_Window.Store[0] == "!":
             return File_Manager_Window.Store[1:]
+        if File_Manager_Window.Store == "Closed":
+            return
         return File_Manager(Path = File_Manager_Window.Store)
