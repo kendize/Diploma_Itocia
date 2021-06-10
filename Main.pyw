@@ -36,14 +36,20 @@ while 1:
     Main_Window.Add( Text([100, 100, 10, 10], "Itocia") )
     Main_Window.Add( Input_Field([100, 200, 200, 50], "Kendize", Border_Size=3, Enabled_Body_Color=[144, 238, 144]))
     Main_Window.Add( Button([300, 400, 100, 30], "Test window"), func = Choose_Image)
-
-
+#
+#
     Main_Window.Start(True)
     if Main_Window.Store == "Closed":
         break
-
+    #Main_Window.ChangeStore("e:\Pictures\\222.jpg")
     Image_Showing_Window = Pseudo_Window([0, 0], [Window.width, Window.height], FPS = FPS)
-    Image_Showing_Window.Add(Image([0, 0, 500, 500], Main_Window.Store, Moveable=True))
-    Image_Showing_Window.Add(Button([300, 550, 100, 30], "Delete all markers"), func = Image_Showing_Window.Elements[0].DeleteAllMarkers)
+    Image_Showing_Window.Add(Image([0, 0, 900, 700], Main_Window.Store, 0.19, Moveable=True))
+    Image_Showing_Window.Add(Button([920, 550, 100, 30], "Delete all markers"), func = Image_Showing_Window.Elements[0].DeleteAllMarkers)
+    Image_Showing_Window.Add(Button([920, 650, 100, 30], "Create Mask"), func = Image_Showing_Window.Elements[0].Create_Mask)
+    Image_Showing_Window.Add(Button([920, 750, 100, 30], "Toggle"), func = Image_Showing_Window.Elements[0].Toggle_Mask)
+
+    Image_Showing_Window.Add(Button([920, 800, 100, 30], "+"), func = Image_Showing_Window.Elements[0].ZoomIn)
+    Image_Showing_Window.Add(Button([920, 850, 100, 30], "-"), func = Image_Showing_Window.Elements[0].ZoomOut)
+
     Image_Showing_Window.Start(True)
     break
