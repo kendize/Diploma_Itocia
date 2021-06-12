@@ -47,9 +47,10 @@ while 1:
     Image_Showing_Window.Add(Button([920, 550, 100, 30], "Delete all markers"), func = Image_Showing_Window.Elements[0].DeleteAllMarkers)
     Image_Showing_Window.Add(Button([920, 650, 100, 30], "Create Mask"), func = Image_Showing_Window.Elements[0].Create_Mask)
     Image_Showing_Window.Add(Button([920, 750, 100, 30], "Toggle"), func = Image_Showing_Window.Elements[0].Toggle_Mask)
+    Image_Showing_Window.Add(Button([1020, 750, 100, 30], "Square"), func = Image_Showing_Window.Elements[0].Calculate_Square)
 
     Image_Showing_Window.Add(Button([920, 800, 100, 30], "+"), func = Image_Showing_Window.Elements[0].ZoomIn)
     Image_Showing_Window.Add(Button([920, 850, 100, 30], "-"), func = Image_Showing_Window.Elements[0].ZoomOut)
 
     Image_Showing_Window.Start(True)
-    break
+    #break

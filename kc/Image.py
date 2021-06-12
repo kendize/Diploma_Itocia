@@ -16,6 +16,7 @@ class Image(object):
         self.markers_surfaces = []
         self.markers_rects = []
         self.markers_positions = []
+        self.scaled_markers_positions = []
         self.isMask = False
         self.Mask_Surface = pygame.Surface([pygame.Surface.get_width(self.image_surface), pygame.Surface.get_height(self.image_surface)])
         self.Mask_Surface_Copy = self.Mask_Surface.copy()
@@ -48,31 +49,34 @@ class Image(object):
             self.Scale_Pointer -= 1
             self.Current_Scale = self.Scales[self.Scale_Pointer]
             scale_gen = int(self.Scales[self.Scale_Pointer] / self.Scales[0])
+            print(scale_gen)
             self.image_surface_scaled = pygame.transform.scale(self.image_surface, 
                                                             [int(self.image_surface.get_width() / scale_gen), int(self.image_surface.get_height()/ scale_gen)])
             self.image_surface_copy = self.image_surface_scaled.copy()
             self.Update_Markers(0, 0, 2)
             for i in range(len(self.markers_positions)):
-                self.markers_positions[i][0] = self.markers_positions[i][0] * 2
-                self.markers_positions[i][1] = self.markers_positions[i][1] * 2
+                self.scaled_markers_positions[i][0] = self.markers_positions[i][0] / scale_gen
+                self.scaled_markers_positions[i][1] = self.markers_positions[i][1] / scale_gen
             #if len(self.markers_positions) > 0:
             #    self.img_pos = self.Calculate_Centered_Position()
             #else:
             #    self.img_pos = [0, 0]
             self.img_pos[0] = int(self.img_pos[0] * 2)
             self.img_pos[1] = int(self.img_pos[1] * 2)
+
     def ZoomOut(self):
         if self.Scale_Pointer < len(self.Scales) - 1:
             self.Scale_Pointer += 1
             self.Current_Scale = self.Scales[self.Scale_Pointer]
             scale_gen = int(self.Scales[self.Scale_Pointer] / self.Scales[0])
+            print(scale_gen)
             self.image_surface_scaled = pygame.transform.scale(self.image_surface, 
                                                             [int(self.image_surface.get_width() / scale_gen), int(self.image_surface.get_height()/ scale_gen)])
             self.image_surface_copy = self.image_surface_scaled.copy()
             self.Update_Markers(0, 0, 0.5)
             for i in range(len(self.markers_positions)):
-                self.markers_positions[i][0] = int(self.markers_positions[i][0] / 2)
-                self.markers_positions[i][1] = int(self.markers_positions[i][1] / 2)
+                self.scaled_markers_positions[i][0] = int(self.markers_positions[i][0] / scale_gen)
+                self.scaled_markers_positions[i][1] = int(self.markers_positions[i][1] / scale_gen)
             #if len(self.markers_positions) > 0:
             #    self.img_pos = self.Calculate_Centered_Position()
             #else:
@@ -81,8 +85,11 @@ class Image(object):
             self.img_pos[1] = int(self.img_pos[1] / 2)
 
     def AddMarker(self, location):
+        self.Current_Scale = self.Scales[self.Scale_Pointer]
+        scale_gen = int(self.Scales[self.Scale_Pointer] / self.Scales[0])
         self.image_surface_copy = self.image_surface_scaled.copy()
-        self.markers_positions.append([location[0] - int(self.marker_W_H[0] / 2), location[1] - int(self.marker_W_H[1] / 2) ])
+        self.scaled_markers_positions.append([location[0] - int(self.marker_W_H[0] / 2), location[1] - int(self.marker_W_H[1] / 2) ])
+        self.markers_positions.append([scale_gen * (location[0] - int(self.marker_W_H[0] / 2)), scale_gen * (location[1] - int(self.marker_W_H[1] / 2)) ])
         self.markers_surfaces.append(self.marker_image.copy())
         self.markers_rects.append(pygame.Rect([location[0] + self.X_Y_W_H[0] + self.img_pos[0] - int(self.marker_W_H[0] / 2), location[1] + self.X_Y_W_H[1]+ self.img_pos[1] - int(self.marker_W_H[1] / 2), pygame.Surface.get_width(pygame.image.load("img/marker.png")), pygame.Surface.get_height(pygame.image.load("img/marker.png"))]))
         return
@@ -91,12 +98,14 @@ class Image(object):
         self.markers_surfaces.pop(i)
         self.markers_rects.pop(i)
         self.markers_positions.pop(i)
+        self.scaled_markers_positions.pop(i)
         self.image_surface_copy = self.image_surface_scaled.copy()
     
     def DeleteAllMarkers(self):
         self.markers_surfaces = []
         self.markers_rects = []
         self.markers_positions = []
+        self.scaled_markers_positions = []
         self.image_surface_copy = self.image_surface_scaled.copy()
         
     def Debug(self):
@@ -105,6 +114,15 @@ class Image(object):
     def Toggle_Mask(self):
         self.isMask = not(self.isMask)
 
+    def Calculate_Square(self):
+        Mask_Surface_Copy = self.Mask_Surface.copy()
+        pygame.draw.polygon(Mask_Surface_Copy, [255, 0, 0], self.markers_positions)
+        Mask_Surface_Copy .set_colorkey([0, 0, 0])
+        a = pygame.mask.from_surface(Mask_Surface_Copy)
+        result = float(a.count() * float(self.Scales[0]*self.Scales[0]))
+        print(result)
+        return result
+
     def Create_Mask(self):
         try:
             self.Mask_Surface_Copy = self.Mask_Surface.copy()
@@ -112,11 +130,11 @@ class Image(object):
             #for i in range(len(positions)):
             #    positions[i][0] = int(positions[i][0] / int(self.Scales[self.Scale_Pointer] / self.Scales[0]))
             #    positions[i][1] = int(positions[i][1] / int(self.Scales[self.Scale_Pointer] / self.Scales[0]))
-            pygame.draw.polygon(self.Mask_Surface_Copy, [255, 0, 0], self.markers_positions)
+            pygame.draw.polygon(self.Mask_Surface_Copy, [255, 0, 0], self.scaled_markers_positions)
             self.Mask_Surface_Copy.set_colorkey([0, 0, 0])
             a = pygame.mask.from_surface(self.Mask_Surface_Copy)
             
-            print(float(a.count() * float(self.Scales[self.Scale_Pointer]*self.Scales[self.Scale_Pointer])))
+            #print(float(a.count() * float(self.Scales[self.Scale_Pointer]*self.Scales[self.Scale_Pointer])))
             a.invert()
             b = a.to_surface()
             b.set_colorkey([0, 0, 0])
@@ -132,15 +150,15 @@ class Image(object):
         self.Surface.fill([230, 230, 230])
         if len(self.markers_positions) > 2:
             for i in range(len(self.markers_positions) - 1):
-                pygame.draw.aaline(
+                pygame.draw.line(
                     self.image_surface_copy, 
                     [255, 255, 255], 
-                    [self.markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
-                    [self.markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
-            pygame.draw.aaline(self.image_surface_copy, [255, 255, 255], [self.markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
+                    [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
+                    [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
+            pygame.draw.line(self.image_surface_copy, [255, 255, 255], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
             #pygame.draw.lines(self.image_surface_copy, [255, 255, 255], True, self.markers_positions)
         for i in range(len(self.markers_surfaces)):
-            self.image_surface_copy.blit(self.markers_surfaces[i], [self.markers_positions[i][0], self.markers_positions[i][1]])
+            self.image_surface_copy.blit(self.markers_surfaces[i], [self.scaled_markers_positions[i][0], self.scaled_markers_positions[i][1]])
         if self.isMask:
             #self.image_surface_copy.blit(self.Mask_Surface_Copy, [0, 0])
             self.Surface.blit(self.Mask_Surface_Copy, self.img_pos)
