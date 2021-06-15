@@ -21,14 +21,14 @@ def Move_To_Path(obj, Store, Stop, Path):                                       
     except:
         return False
 
-def Create_Visual_Elements(*args, Disabled_Text_Color, Disabled_Body_Color, Disabled_Border_Color, Border_Size, Enabled_Text_Color, Enabled_Body_Color, Enabled_Border_Color, isDrives = False, Path):                                                   # Функція для створення візуальної презентації елементів
+def Create_Visual_Elements(*args, Disabled_Text_Color, Disabled_Body_Color, Disabled_Border_Color, Border_Size, Enabled_Text_Color, Enabled_Body_Color, Enabled_Border_Color, isDrives = False,width = 500, Path):                                                   # Функція для створення візуальної презентації елементів
     
     x = 3
     if args:
         y = 3 + args[0]
     else:
         y = 3
-    w = 500
+    w = width
     h = 35
     text_size = 17
     Elements = []

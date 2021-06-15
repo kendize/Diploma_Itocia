@@ -11,9 +11,12 @@ def File_Manager(FPS = 60,
                 Disabled_Border_Color = [0, 0, 0], 
                 Disabled_Text_Color = [50, 50, 50], 
                 Border_Size = 1,
-                Path = "Drives"):
-    window_resolution = [550, 750]
-    window_position = [10, 10]
+                Path = "Drives",
+                window_resolution = [550, 750],
+                window_position = [10, 10]
+                ):
+    #window_resolution = [550, 750]
+    #window_position = [10, 10]
 
     def Scroll():
         if File_Manager_Window.Elements[1].X_Y_W_H[1] < 0 or File_Manager_Window.Elements[-2].X_Y_W_H[1] > (window_resolution[1]-50):
@@ -39,7 +42,8 @@ def File_Manager(FPS = 60,
             Enabled_Text_Color = Enabled_Text_Color, 
             Enabled_Body_Color = Enabled_Body_Color, 
             Enabled_Border_Color = Enabled_Border_Color,
-            Path = Path
+            Path = Path,
+            width=int(window_resolution[0] * 0.95)
             )
         
         #print(File_Manager_Window.Elements[1])
@@ -58,4 +62,5 @@ def File_Manager(FPS = 60,
             return File_Manager_Window.Store[1:]
         if File_Manager_Window.Store == "Closed":
             return
-        return File_Manager(Path = File_Manager_Window.Store)
+        return File_Manager(Path = File_Manager_Window.Store, window_resolution = window_resolution,
+                window_position = window_position)

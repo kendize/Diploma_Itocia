@@ -2,6 +2,7 @@ import pygame.rect
 import pygame.draw
 import pygame.key
 from kc.text_class import *
+
 class Button(object):
     def __init__(
         self, 
@@ -38,9 +39,8 @@ class Button(object):
         self.text = str(text)
         
         self.Text_Size = Text_Size
-        self.Enabled_Text = Text((0, 0), self.text, self.Text_Size, self.Enabled_Text_Color)
-        self.Disabled_Text = Text((0, 0), self.text, self.Text_Size, self.Disabled_Text_Color)
-
+        self.Enabled_Text = Text((0, 0), self.text, self.Text_Size, self.Enabled_Text_Color, rwidth=self.X_Y_W_H[2])
+        self.Disabled_Text = Text((0, 0), self.text, self.Text_Size, self.Disabled_Text_Color, rwidth=self.X_Y_W_H[2])
         if self.text[0] == "/":                                                                             # If Text on button starts with "/", then program think that this Text is path for image
             self.img = pygame.image.load(self.text[1:])                                                     # Loading this image
             path = list(self.text)
@@ -68,8 +68,8 @@ class Button(object):
         else:
             self.Text_X_Y = [0, 0]
 
-        self.Enabled_Text = Text((self.Text_X_Y[0], self.Text_X_Y[1]), self.text, self.Text_Size, self.Enabled_Text_Color)
-        self.Disabled_Text = Text((self.Text_X_Y[0], self.Text_X_Y[1]), self.text, self.Text_Size, self.Disabled_Text_Color)
+        self.Enabled_Text.X_Y_W_H = self.Text_X_Y# = Text((self.Text_X_Y[0], self.Text_X_Y[1]), self.text, self.Text_Size, self.Enabled_Text_Color, rwidth=self.X_Y_W_H[2])
+        self.Disabled_Text.X_Y_W_H = self.Text_X_Y# = Text((self.Text_X_Y[0], self.Text_X_Y[1]), self.text, self.Text_Size, self.Disabled_Text_Color, rwidth= self.X_Y_W_H[2])
 
         
 
@@ -123,8 +123,9 @@ class Button(object):
             if Event.type == pygame.MOUSEBUTTONUP:
                 if self.rect.collidepoint(Event.pos):
                     if Event.button == 1:
-                        self.Active = False
-                        return True
+                        if self.Active:
+                            self.Active = False
+                            return True
                 else:
                     if Event.button == 1:
                         self.Active = False

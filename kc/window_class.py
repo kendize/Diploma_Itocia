@@ -4,7 +4,7 @@ import pygame.time
 import os
 class Window_Class(object):
     def __init__(self, window_width = 800, window_height = 600, window_caption = "Application", Body_Color = [255, 255, 255], fullscreen = False):
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "10, 10"
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "0, 0"
         self.fullscreen = fullscreen
         self.width = window_width
         self.height = window_height
