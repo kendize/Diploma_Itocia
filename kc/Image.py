@@ -1,13 +1,12 @@
 from pygame import image, KMOD_LALT, KMOD_NONE
 import pygame.key
-class Image(object):
-    def __init__(self, X_Y_W_H, path, initial_scale, Moveable = False, img_pos = [0, 0]):
+class Image_Manipulator(object):
+    def __init__(self, X_Y_W_H, path, initial_scale, img_pos = [0, 0]):
         self.image_surface = image.load(path)
         self.image_surface_scaled = self.image_surface.copy()
         self.image_surface_copy = self.image_surface.copy()
         self.X_Y_W_H = X_Y_W_H
         self.path = path
-        self.Moveable = Moveable
         self.Move = False
         self.Surface = pygame.Surface([X_Y_W_H[2], X_Y_W_H[3]])
         self.img_pos = [0, 0]
@@ -56,9 +55,7 @@ class Image(object):
             self.image_surface_scaled = pygame.transform.scale(self.image_surface, 
                                                             [int(self.image_surface.get_width() / scale_gen), int(self.image_surface.get_height()/ scale_gen)])
             self.image_surface_copy = self.image_surface_scaled.copy()
-            #for i in range(len(self.markers_rects)):
-            #    self.markers_rects[i] = pygame.Rect((int((self.markers_rects[i][0])/ scale_gen), int((self.markers_rects[i][1] )/ scale_gen), self.markers_rects[i][2], self.markers_rects[i][3]))
-
+            
             for i in range(len(self.markers_positions)):
                 self.scaled_markers_positions[i][0] = self.markers_positions[i][0] / scale_gen
                 self.scaled_markers_positions[i][1] = self.markers_positions[i][1] / scale_gen
@@ -70,9 +67,7 @@ class Image(object):
                 self.img_pos[1] = int(self.img_pos[1] / 2)
             for i in range(len(self.markers_rects)):
                 self.markers_rects[i] = pygame.Rect((int((self.markers_positions[i][0])/ scale_gen) + self.img_pos[0] + self.X_Y_W_H[0], int((self.markers_positions[i][1] )/ scale_gen) + self.img_pos[1] + self.X_Y_W_H[1], self.markers_rects[i][2], self.markers_rects[i][3]))
-            #print(self.markers_rects[0])
-            #print(self.img_pos)
-            #print(self.markers_positions[0])
+
 
 
     def ZoomOut(self):
@@ -96,9 +91,7 @@ class Image(object):
                 self.img_pos[1] = int(self.img_pos[1] / 2)
             for i in range(len(self.markers_rects)):
                 self.markers_rects[i] = pygame.Rect((int((self.markers_positions[i][0])/ scale_gen) + self.img_pos[0] + self.X_Y_W_H[0], int((self.markers_positions[i][1] )/ scale_gen) + self.img_pos[1] + self.X_Y_W_H[1], self.markers_rects[i][2], self.markers_rects[i][3]))
-            #print(self.markers_rects[0])
-            #print(self.img_pos)
-            #print(self.markers_positions[0])
+
 
     def AddMarker(self, location):
 
@@ -150,7 +143,7 @@ class Image(object):
         return result
 
     def Create_Mask(self):
-        #try:
+        try:
             self.Mask_Surface_Copy = self.Mask_Surface.copy()
             pygame.draw.polygon(self.Mask_Surface_Copy, [255, 0, 0], self.markers_positions)
             self.Mask_Surface_Copy.set_colorkey([0, 0, 0])
@@ -185,11 +178,9 @@ class Image(object):
                 result_values.append(str(values.pop(index)))
                 result_keys.append(str(keys.pop(index)))
                 print(result_keys[i] + " --- " + result_values[i])
-
-            #maximum
             
             return True
-        #except:
+        except:
             return False
         
 
@@ -203,20 +194,14 @@ class Image(object):
                     [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
                     [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
             pygame.draw.line(self.image_surface_copy, [255, 255, 255], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
-            #pygame.draw.lines(self.image_surface_copy, [255, 255, 255], True, self.markers_positions)
         for i in range(len(self.markers_surfaces)):
             self.image_surface_copy.blit(self.markers_surfaces[i], [self.scaled_markers_positions[i][0], self.scaled_markers_positions[i][1]])
         if self.isMask:
-            #self.image_surface_copy.blit(self.Mask_Surface_Copy, [0, 0])
-            #self.Surface.blit(self.Mask_Surface_Copy, self.img_pos)
             self.Surface.blit(self.Result_Surface, self.img_pos)
         else:
             self.Surface.blit(self.image_surface_copy, self.img_pos)
         pygame.draw.rect(self.Surface, [255, 255, 255], [0, 0, self.X_Y_W_H[2], self.X_Y_W_H[3]], 2)
         return self.Surface
-
-    def Toggle_Movement(self):
-        self.Moveable = not(self.Moveable)
 
     def Update_Markers(self, x = 0, y = 0):
         for i in range(len(self.markers_rects)):
@@ -225,30 +210,32 @@ class Image(object):
 
     def Check(self, Event):
         result = False
-        if self.Moveable:
-            if Event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.Rect(self.X_Y_W_H).collidepoint(Event.pos):
-                    if Event.button == 3:
-                        self.Move = True
-                    if Event.button == 1:
-                        for i in range(len(self.markers_surfaces)):
-                            if pygame.Rect(self.markers_rects[i]).collidepoint(Event.pos):
-                                self.DeleteMarker(i)
-                                print("Marker deleted")
-                                result = "Deleted"
-                                return True
-                        if result != "Deleted":
-                            if pygame.Rect([self.img_pos[0] + self.X_Y_W_H[0], self.img_pos[1] + self.X_Y_W_H[1]], [self.image_surface_scaled.get_width(), self.image_surface_scaled.get_height()]).collidepoint(Event.pos):
-                                self.AddMarker([Event.pos[0] - self.X_Y_W_H[0] - self.img_pos[0], Event.pos[1] - self.X_Y_W_H[1] - self.img_pos[1]])
-                                print("Marker added")
-                                return True
-            if Event.type == pygame.MOUSEBUTTONUP:
+    
+        if Event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.Rect(self.X_Y_W_H).collidepoint(Event.pos):
                 if Event.button == 3:
-                    self.Move = False
-            if self.Move:
-                if Event.type == pygame.MOUSEMOTION:
-                    self.img_pos[0] += Event.rel[0]
-                    self.img_pos[1] += Event.rel[1]
-                    self.Update_Markers(Event.rel[0], Event.rel[1])
-                    self.Draw()
-            return True
+                    self.Move = True
+                if Event.button == 1:
+                    for i in range(len(self.markers_surfaces)):
+                        if pygame.Rect(self.markers_rects[i]).collidepoint(Event.pos):
+                            self.DeleteMarker(i)
+                            print("Marker deleted")
+                            result = "Deleted"
+                            return True
+                    if result != "Deleted":
+                        if pygame.Rect([self.img_pos[0] + self.X_Y_W_H[0], self.img_pos[1] + self.X_Y_W_H[1]], [self.image_surface_scaled.get_width(), self.image_surface_scaled.get_height()]).collidepoint(Event.pos):
+                            self.AddMarker([Event.pos[0] - self.X_Y_W_H[0] - self.img_pos[0], Event.pos[1] - self.X_Y_W_H[1] - self.img_pos[1]])
+                            print("Marker added")
+                            return True
+                    
+        if Event.type == pygame.MOUSEBUTTONUP:
+            if Event.button == 3:
+                self.Move = False
+        if self.Move:
+            if Event.type == pygame.MOUSEMOTION:
+                self.img_pos[0] += Event.rel[0]
+                self.img_pos[1] += Event.rel[1]
+                self.Update_Markers(Event.rel[0], Event.rel[1])
+                self.Draw()
+
+        return True

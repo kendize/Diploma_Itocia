@@ -13,7 +13,8 @@ def File_Manager(FPS = 60,
                 Border_Size = 1,
                 Path = "Drives",
                 window_resolution = [550, 750],
-                window_position = [10, 10]
+                window_position = [10, 10],
+                bg = False
                 ):
     #window_resolution = [550, 750]
     #window_position = [10, 10]
@@ -27,8 +28,15 @@ def File_Manager(FPS = 60,
         Elements = Get_List_Of_Drives()
     else:
         Elements = Get_List_Of_Elements(Path)
-
-    File_Manager_Window = Pseudo_Window(window_position, window_resolution)
+    if bg:
+        File_Manager_Window = Pseudo_Window(window_position, window_resolution, Moveable=True, BackGround=bg)
+    else:
+        copy = Window.surface.copy()
+        copy1 = Window.surface.copy().convert_alpha()
+        copy1.fill((0, 0, 0, 100))
+        copy.blit(copy1, [0, 0, copy.get_width(), copy.get_height()], None, 0)
+        copy = copy.convert(copy)
+        File_Manager_Window = Pseudo_Window(window_position, window_resolution, Moveable=True, BackGround=copy)
     File_Manager_Loop = True
     while File_Manager_Loop:
         File_Manager_Window.Add(Invis_Scroll(0), func = Scroll)
@@ -62,5 +70,7 @@ def File_Manager(FPS = 60,
             return File_Manager_Window.Store[1:]
         if File_Manager_Window.Store == "Closed":
             return
-        return File_Manager(Path = File_Manager_Window.Store, window_resolution = window_resolution,
-                window_position = window_position)
+        return File_Manager(Path = File_Manager_Window.Store, 
+                            window_resolution = window_resolution,
+                    window_position = window_position,
+                    bg = File_Manager_Window.BackGround)

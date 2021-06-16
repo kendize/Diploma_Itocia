@@ -4,7 +4,7 @@ import ctypes
 ctypes.windll.user32.SetProcessDPIAware()
 
 class Pseudo_Window(object):
-    def __init__(self, Window_Pos, Window_Res, Moveable = False, Body_Color = [230, 230, 230], Border_Size = 1, Border_Color = [0, 0, 0], FPS = 60):
+    def __init__(self, Window_Pos, Window_Res, Moveable = False, Body_Color = [230, 230, 230], Border_Size = 2, Border_Color = [0, 0, 0], FPS = 60, BackGround = False):
         self.Window_Pos = Window_Pos
         self.Window_Res = Window_Res
         self.Body_Color = Body_Color
@@ -19,6 +19,7 @@ class Pseudo_Window(object):
         self.FPS = FPS
         self.Loop = True
         self.Store = []
+        self.BackGround = BackGround
 
     def AddCloseButton(self):
         self.Add(Button([self.Window_Res[0] - 38, 2, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230]), func=self.Close)
@@ -49,12 +50,12 @@ class Pseudo_Window(object):
     def Update_Elements(self):
         for Element in range(len(self.Elements)):
             self.Elements[Element].position = self.Window_Pos
-            if not(type(Element) == text_class.Text):
+            if not(type( self.Elements[Element]) == text_class.Text):
                 self.Elements[Element].rect = pygame.Rect((self.Elements[Element].X_Y_W_H[0] + self.Window_Pos[0], self.Elements[Element].X_Y_W_H[1] + self.Window_Pos[1], self.Elements[Element].X_Y_W_H[2], self.Elements[Element].X_Y_W_H[3]))
 
     def Draw(self, update = True):
         self.surface.fill(self.Body_Color)
-        pygame.draw.rect(self.surface, self.Border_Color, [0, 0, self.Window_Res[0], self.Window_Res[1]], self.Border_Size)
+        pygame.draw.rect(self.surface, self.Border_Color, [0, 0, self.Window_Res[0] - (self.Border_Size - 1), self.Window_Res[1] - (self.Border_Size - 1)], self.Border_Size)
         for Element in self.Elements:
             Draw(Element, self.surface)
         Window.surface.blit(self.surface, (self.Window_Pos[0], self.Window_Pos[1]))
@@ -63,7 +64,19 @@ class Pseudo_Window(object):
 
     def Start(self, Looped = False):
         self.AddCloseButton()
-        copp = Window.surface.copy()
+        if self.BackGround:
+            copy = self.BackGround
+            self.BackGround = copy
+            #copy1 = self.BackGround.copy().convert_alpha()
+        else:
+            copy = Window.surface.copy()
+            copy1 = Window.surface.copy().convert_alpha()
+            copy1.fill((0, 0, 0, 100))
+            copy.blit(copy1, [0, 0, copy.get_width(), copy.get_height()], None, 0)
+            copy = copy.convert(copy)
+        
+        #copy.blit(copy, [0, 0, copy.get_width(), copy.get_height()], None, pygame.BLEND_RGBA_MULT)
+        #copy.blit(copy, [0, 0, copy.get_width(), copy.get_height()], None, pygame.BLEND_RGBA_MULT)
         Not_Active = [
             Text,
             Box
@@ -129,7 +142,7 @@ class Pseudo_Window(object):
                             self.Window_Pos[1] += Event.rel[1]
                             self.Update_Elements()
             
-            Window.surface.blit(copp, (0, 0))
+            Window.surface.blit(copy, (0, 0))
 
             self.Draw()
         return True

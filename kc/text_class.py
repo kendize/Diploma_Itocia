@@ -23,11 +23,13 @@ class Text(object):
     
     def Render(self, new_text):
         self.text = new_text
+        
         while 1:
             self.surface = pygame.font.SysFont(self.font, self.Text_Size).render(str(self.text),  True, self.Color)
             if pygame.Surface.get_width(self.surface) > self.rwidth:
                 self.Text_Size -= 2
             else:
+                self.rect = pygame.Rect((self.X_Y_W_H[0], self.X_Y_W_H[1], pygame.Surface.get_width(self.surface) + 3, pygame.Surface.get_height(self.surface) + 3))
                 break
         
 
