@@ -63,6 +63,7 @@ class Pseudo_Window(object):
             Update(self.FPS)
 
     def Start(self, Looped = False):
+        self.Loop = True
         self.AddCloseButton()
         if self.BackGround:
             copy = self.BackGround

@@ -90,7 +90,7 @@ def Main_Window_Create():
     Main_Window.Add( Text(  [100, 100, 10, 10], 
                             "Itocia") )
     Main_Window.Add( Input_Field(   [100, 200, 200, 50], 
-                                    "Kendize", 
+                                    "Тестове поле", 
                                     Border_Size=3, 
                                     Enabled_Body_Color=LightGreen_Color))
     Main_Window.Add( Button([300, 400, 300, 40], 

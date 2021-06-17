@@ -202,9 +202,37 @@ class Image_Manipulator(object):
             for i in range(len(self.markers_positions) - 1):
                 pygame.draw.line(
                     self.image_surface_copy, 
+                    [0, 0, 0], 
+                    [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2) + 1, self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
+                    [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2) + 1, self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
+
+                pygame.draw.line(
+                    self.image_surface_copy, 
+                    [0, 0, 0], 
+                    [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2) - 1, self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
+                    [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2) - 1, self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
+  
+                pygame.draw.line(
+                    self.image_surface_copy, 
+                    [0, 0, 0], 
+                    [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2) + 1], 
+                    [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2) + 1], 2)
+
+                pygame.draw.line(
+                    self.image_surface_copy, 
+                    [0, 0, 0], 
+                    [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2) - 1], 
+                    [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2) - 1], 2)
+                pygame.draw.line(
+                    self.image_surface_copy, 
                     [255, 255, 255], 
                     [self.scaled_markers_positions[i][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i][1] + int(self.marker_W_H[1] / 2)], 
                     [self.scaled_markers_positions[i + 1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[i + 1][1] + int(self.marker_W_H[1] / 2)], 2)
+
+            pygame.draw.line(self.image_surface_copy, [0, 0, 0], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2) + 1, self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2) + 1, self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
+            pygame.draw.line(self.image_surface_copy, [0, 0, 0], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2) - 1, self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2) - 1, self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
+            pygame.draw.line(self.image_surface_copy, [0, 0, 0], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2) + 1], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2) + 1], 2)
+            pygame.draw.line(self.image_surface_copy, [0, 0, 0], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2) - 1], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2) - 1], 2)
             pygame.draw.line(self.image_surface_copy, [255, 255, 255], [self.scaled_markers_positions[0][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[0][1] + int(self.marker_W_H[1] / 2)], [self.scaled_markers_positions[-1][0] + int(self.marker_W_H[0] / 2), self.scaled_markers_positions[-1][1] + int(self.marker_W_H[1] / 2)], 2)
         for i in range(len(self.markers_surfaces)):
             self.image_surface_copy.blit(self.markers_surfaces[i], [self.scaled_markers_positions[i][0], self.scaled_markers_positions[i][1]])
