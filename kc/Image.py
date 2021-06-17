@@ -24,6 +24,7 @@ class Image_Manipulator(object):
         scale_gen = 1
         self.initial_scale = float(initial_scale)
         self.Scales = [self.initial_scale]
+        self.Colors = []
         while 1:
             scale_gen = scale_gen * 2
             scaled_image =  pygame.transform.scale(self.image_surface, [int(self.image_surface.get_width() / scale_gen), int(self.image_surface.get_height()/ scale_gen)])
@@ -156,9 +157,15 @@ class Image_Manipulator(object):
             x = [i[0] for i in self.markers_positions]
             y = [i[1] for i in self.markers_positions]
             self.Result_Surface = pygame.Surface([max(x) - min(x), max(y) - min(y)])
-            
+            self.Result_Surface.convert()
             self.Result_Surface.blit(self.Mask_Surface_Copy, [0, 0], [min(x), min(y), max(x), max(y)])
             self.Result_Surface.set_colorkey([255, 255, 255])
+            return True
+        except:
+            return False
+
+    def Top_Colors(self):
+        try:
             result = {}
             for x in range(self.Result_Surface.get_width()):
                 for y in range(self.Result_Surface.get_height()):
@@ -173,13 +180,18 @@ class Image_Manipulator(object):
             keys.pop(index)
             result_values = []
             result_keys = []
-            for i in range(50):
+
+            size = len(values)
+            if size > 50:
+                size = 50
+
+            for i in range(size):
                 index = values.index(max(values))
                 result_values.append(str(values.pop(index)))
                 result_keys.append(str(keys.pop(index)))
-                print(result_keys[i] + " --- " + result_values[i])
-            
-            return True
+                #print(result_keys[i] + " --- " + result_values[i])
+            self.Colors = [result_keys, result_values]
+            return [result_keys, result_values]
         except:
             return False
         

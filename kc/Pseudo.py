@@ -22,7 +22,7 @@ class Pseudo_Window(object):
         self.BackGround = BackGround
 
     def AddCloseButton(self):
-        self.Add(Button([self.Window_Res[0] - 38, 2, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230]), func=self.Close)
+        self.Add(Button([self.Window_Res[0] - 39, 3, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230]), func=self.Close)
 
     def ChangeStore(self, info):
         print("Pseudo: Changing Store :", info)
