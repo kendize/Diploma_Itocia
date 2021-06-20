@@ -1,6 +1,6 @@
 # Імпортуємо необхідні файли та бібліотеки
 from kc import *
-from kc import Pseudo_Window
+from kc import Graphic_Window
 from FileManager import *
 from win32api import GetMonitorInfo, MonitorFromPoint
 from PIL import Image
@@ -28,7 +28,7 @@ Window.Start()
 
 
 def Error_Message(Error):
-    Error_Window = Pseudo_Window([Window.width / 2 - 150, Window.height / 2 - 40, 300, 50], [400, 80], FPS = FPS, Body_Color = Salmon_Color)
+    Error_Window = Graphic_Window([Window.width / 2 - 150, Window.height / 2 - 40, 300, 50], [400, 80], FPS = FPS, Body_Color = Salmon_Color)
     Error_Window.Add(Text([10, 10, 300, 50], str(Error), Text_Size=23, rwidth= 350))
     Error_Window.Start()
 
@@ -62,7 +62,7 @@ def Reload_Scale2():
 
 # Створюємо і додаємо елементи на вікно інформації про программу:
 def Author_Window_Create():
-    Author_Window = Pseudo_Window([300, 300], [Window.width / 2, Window.height / 3], FPS = FPS, Moveable=True)
+    Author_Window = Graphic_Window([300, 300], [Window.width / 2, Window.height / 3], FPS = FPS, Moveable=True)
     Author_Window.Add( Text(  [10, 10, 10, 10], 
                             "Дипломна робота",
                             Text_Size=40) )
@@ -86,7 +86,7 @@ def Author_Window_Create():
 
 # Створюємо і додаємо елементи на початкове вікно:
 def Main_Window_Create():
-    Main_Window = Pseudo_Window([0, 0], [Window.width, Window.height], FPS = FPS)
+    Main_Window = Graphic_Window([0, 0], [Window.width, Window.height], FPS = FPS)
     Main_Window.Add( Text(  [100, 100, 10, 10], 
                             "Itocia") )
     Main_Window.Add( Input_Field(   [100, 200, 200, 50], 
@@ -103,7 +103,7 @@ def Main_Window_Create():
 
 # Створюємо і додаємо елементи на вікно вибору масштабу:
 def Choose_Scale_Window_Create():
-    Choose_Scale_Window = Pseudo_Window([int(Window.width / 3), int(Window.width / 80)], [int(Window.width / 3), int(Window.height * 0.5)], FPS = FPS, Moveable=True)
+    Choose_Scale_Window = Graphic_Window([int(Window.width / 3), int(Window.width / 80)], [int(Window.width / 3), int(Window.height * 0.5)], FPS = FPS, Moveable=True)
     Choose_Scale_Window.Add(Text([10, 10], "Вкажіть масштаб зображення:", rwidth=int(Window.width / 3) - 40))
     Choose_Scale_Window.Add(Input_Field(X_Y_W_H=[10, 100, int(Window.width / 3) - 20, 50], text="0.19", Enabled_Body_Color=LightGreen_Color))
     Choose_Scale_Window.Add(Button(X_Y_W_H=[10, 200, int(Window.width / 3)-20, 50], text="Наступний крок"), func = Change_Scale_Value)
@@ -112,7 +112,7 @@ def Choose_Scale_Window_Create():
 # Створюємо і додаємо елементи на вікно інформації про зображення:
 def Image_Information_Window_Create():
     Path = Main_Window.Store
-    Image_Information_Window = Pseudo_Window([int(Window.width / 3), int(Window.width / 80)], [int(Window.width / 3), int(Window.height * 0.5)], FPS = FPS, Moveable=True)
+    Image_Information_Window = Graphic_Window([int(Window.width / 3), int(Window.width / 80)], [int(Window.width / 3), int(Window.height * 0.5)], FPS = FPS, Moveable=True)
     image = pygame.image.load(Path)
     ImageObj = Image.open(Path)
     
@@ -141,16 +141,17 @@ def Image_Information_Window_Create():
         ImageObj = "3x8 біт, True Color"
     elif ImageObj == "RGBA":
         ImageObj = "4x8 біт, True Color з прозорістю"
+    elif ImageObj == "CMYK":
+        ImageObj = "3x8 біт, CMYK"    
     else:
         ImageObj == "Невідомо"
     Image_Information_Window.Add( Text(  [20, 220, 10, 10], 
                                 "Тип і Глибина кольору: " + ImageObj) )                     
-    #print("Размер файла:", os.stat(Path).st_rsize)
     return Image_Information_Window
 
 # Створюємо і додаємо елементи на вікно роботи з зображенням:
 def Image_Showing_Window_Create():
-    Image_Showing_Window = Pseudo_Window([0, 0], [Window.width, Window.height], FPS = FPS)
+    Image_Showing_Window = Graphic_Window([0, 0], [Window.width, Window.height], FPS = FPS)
     Image_Showing_Window.Add(Image_Manipulator([5, 5, int(Window.width * 0.85), int(Window.height * 0.9)], Main_Window.Store, Choose_Scale_Window.Store))
     Image_Showing_Window.Add(Button([int(Window.width * 0.87), 550, 100, 30], "Delete all markers"), func = Image_Showing_Window.Elements[0].DeleteAllMarkers)
     Image_Showing_Window.Add(Button([int(Window.width * 0.87), 650, 100, 30], "Create Mask"), func = Image_Showing_Window.Elements[0].Create_Mask)
@@ -165,7 +166,7 @@ def Image_Showing_Window_Create():
     return Image_Showing_Window
 
 def Top_Colors_Window_Create(Colors):
-    Top_Colors_Window = Pseudo_Window([int(Window.width / 6), int(Window.height / 80)], [int(2 * Window.width / 3), int(Window.height * 0.9)], FPS = FPS, Moveable=True)
+    Top_Colors_Window = Graphic_Window([int(Window.width / 6), int(Window.height / 80)], [int(2 * Window.width / 3), int(Window.height * 0.9)], FPS = FPS, Moveable=True)
     number_of_colors = len(Colors[0])
     row = 0
     data = 0

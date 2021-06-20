@@ -13,7 +13,6 @@ class Window_Class(object):
         self.surface = pygame.display.set_mode((self.width, self.height), RESIZABLE)
 
     def Start(self):
-        
         pygame.init()
         if self.fullscreen:
             self.surface = pygame.display.set_mode((self.width, self.height), FULLSCREEN, RESIZABLE)
@@ -33,7 +32,6 @@ def Draw(subject, obj = False):
         obj.blit(surface, (subject.X_Y_W_H[0], subject.X_Y_W_H[1]))
     else:
         Window.surface.blit(surface, (subject.X_Y_W_H[0], subject.X_Y_W_H[1]))
-
 
 Window = Window_Class(1, 1, "GUI")
 Window.Start()

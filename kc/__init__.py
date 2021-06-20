@@ -14,7 +14,7 @@ from kc.slider_class import *
 
 from kc.draw_class import *
 
-from kc.Pseudo import *
+from kc.Graphic import *
 
 from pygame import image
 

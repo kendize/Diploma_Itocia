@@ -3,7 +3,7 @@ from kc import *
 import ctypes
 ctypes.windll.user32.SetProcessDPIAware()
 
-class Pseudo_Window(object):
+class Graphic_Window(object):
     def __init__(self, Window_Pos, Window_Res, Moveable = False, Body_Color = [230, 230, 230], Border_Size = 2, Border_Color = [0, 0, 0], FPS = 60, BackGround = False):
         self.Window_Pos = Window_Pos
         self.Window_Res = Window_Res
@@ -25,7 +25,7 @@ class Pseudo_Window(object):
         self.Add(Button([self.Window_Res[0] - 39, 3, 40, 30], "/img/close.png", position = self.Window_Pos, Border_Size= 0, Disabled_Body_Color = [230, 230, 230]), func=self.Close)
 
     def ChangeStore(self, info):
-        print("Pseudo: Changing Store :", info)
+        print("Graphic: Changing Store :", info)
         self.Store = info
 
 
@@ -40,12 +40,12 @@ class Pseudo_Window(object):
     def Stop(self):
         self.Loop = False
         #self.ChangeStore("Closed")
-        print("Pseudo Stopped")
+        print("Graphic Stopped")
     
     def Close(self):
         self.Loop = False
         self.ChangeStore("Closed")
-        print("Pseudo Stopped")
+        print("Graphic Stopped")
 
     def Update_Elements(self):
         for Element in range(len(self.Elements)):
